@@ -1,15 +1,15 @@
-package com.example.firstproject;
+package com.example.firstproject.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.firstproject.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -94,7 +94,7 @@ TextView signin;
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             //updateUI(user);
-                            startActivity(new Intent(getApplicationContext(),Successfullylogin.class));
+                            startActivity(new Intent(getApplicationContext(), Successfullylogin.class));
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
