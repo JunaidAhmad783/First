@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.paperdb.Paper;
 
 public class Successfullylogin extends AppCompatActivity {
 EditText name,email;
@@ -31,16 +32,21 @@ Button logout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_successfullylogin);
-
+        Paper.init(getApplicationContext());
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         profile=findViewById(R.id.profile_image);
         name=findViewById(R.id.name);
         email=findViewById(R.id.email);
         logout=findViewById(R.id.logout);
-        GoogleSignInAccount googleSignInAccount= GoogleSignIn.getLastSignedInAccount(this);
+        User  user1=Paper.book().read("user");
+        name.setText(user1.getUsername());
+        email.setText(user1.getEmail());
+        Glide.with(this).load(user1.getUrl()).into(profile);
+
+       /* GoogleSignInAccount googleSignInAccount= GoogleSignIn.getLastSignedInAccount(this);
         name.setText(googleSignInAccount.getDisplayName());
         email.setText(googleSignInAccount.getEmail());
+
         Glide.with(this).load(googleSignInAccount.getPhotoUrl()).into(profile);
         writeNewUser(name.getText().toString(),email.getText().toString(),googleSignInAccount.getPhotoUrl().toString());
 
@@ -51,7 +57,7 @@ Button logout;
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             }
-        });
+        });*/
     }
     public void writeNewUser(String name, String email, String Url) {
         User user = new User(name, email,Url);

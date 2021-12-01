@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.firstproject.Models.User;
 import com.example.firstproject.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,6 +23,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import io.paperdb.Paper;
 
 public class MainActivity extends AppCompatActivity {
 TextView signin;
@@ -40,6 +43,7 @@ TextView signin;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Paper.init(getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
         processresult();
         signin=findViewById(R.id.sign);
@@ -51,8 +55,6 @@ TextView signin;
         });
     }
 
-
-
     private void processresult() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -63,9 +65,7 @@ TextView signin;
     private void process() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 101);
-
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -91,8 +91,15 @@ TextView signin;
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-
                             FirebaseUser user = mAuth.getCurrentUser();
+                            GoogleSignInAccount googleSignInAccount= GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+
+                            User  user1=new User();
+                            user1.setEmail(googleSignInAccount.getEmail());
+                            user1.setUrl(googleSignInAccount.getPhotoUrl().toString());
+                            user1.setUsername(googleSignInAccount.getDisplayName());
+
+                            Paper.book().write("user",user1);
                             //updateUI(user);
                             startActivity(new Intent(getApplicationContext(), Successfullylogin.class));
                             finish();
