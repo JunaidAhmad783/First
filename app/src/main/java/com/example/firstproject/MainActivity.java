@@ -32,8 +32,9 @@ TextView signin;
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
-       // updateUI(currentUser);
+        if(currentUser!=null){
+            Toast.makeText(MainActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+        }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
